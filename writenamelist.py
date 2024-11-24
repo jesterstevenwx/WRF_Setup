@@ -7,6 +7,8 @@ smons = [*([7] * 25), *([8] * 24)] #must have start of entire sim at beginning
 emons = [8, *([7] * 23), *([8] * 25)] #must have end of entire sim at beginning
 shrs = [0, *([0, 12] * 24)] #must have start of entire sim at beginning
 ehrs = [0, *([12, 0] * 24)] #must have end of entire sim at beginning
+syrs = [*([2023] * 49)]
+eyrs = [*([2023] * 49)]
 e_we_d01 = 443
 e_we_d02 = 301
 e_sn_d01 = 266
@@ -14,21 +16,22 @@ e_sn_d02 = 256
 i_parent_start_d02 = 372
 j_parent_start_d02 = 154
 
+#! Various physics and chemistry settings must be edited individually below for now. 
 
-for seq, smon, sday, shr, emon, eday, ehr in zip(seqs, smons, sdays, shrs, emons, edays, ehrs):
+for seq, syr, smon, sday, shr, eyr, emon, eday, ehr in zip(seqs, syrs, smons, sdays, shrs, eyrs, emons, edays, ehrs):
     with open(f'namelist.input.{f"{seq:02}" if isinstance(seq, int) else seq}','a') as fl:
         fl.write(f'&time_control\n')
         fl.write(f'run_days                            = 0,\n')
         fl.write(f'run_hours                           = 12,\n')
         fl.write(f'run_minutes                         = 0,\n')
         fl.write(f'run_seconds                         = 0,\n')
-        fl.write(f'start_year                          = 2023, 2023, 2023, 2023,\n')
+        fl.write(f'start_year                          = {syr}, {syr}, {syr}, {syr},\n')
         fl.write(f'start_month                         = {smon:02}, {smon:02}, {smon:02}, {smon:02},\n')
         fl.write(f'start_day                           = {sday:02}, {sday:02}, {sday:02}, {sday:02},\n')
         fl.write(f'start_hour                          = {shr:02}, {shr:02}, {shr:02}, {shr:02},\n')
         fl.write(f'start_minute                        = 00, 00, 00, 00,\n')
         fl.write(f'start_second                        = 00, 00, 00, 00,\n')
-        fl.write(f'end_year                            = 2023, 2023, 2023, 2023,\n')
+        fl.write(f'end_year                            = {eyr}, {eyr}, {eyr}, {eyr},\n')
         fl.write(f'end_month                           = {emon:02}, {emon:02}, {emon:02}, {emon:02},\n')
         fl.write(f'end_day                             = {eday:02}, {eday:02}, {eday:02}, {eday:02},\n')
         fl.write(f'end_hour                            = {ehr:02}, {ehr:02}, {ehr:02}, {ehr:02},\n')
