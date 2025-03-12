@@ -15,7 +15,7 @@ e_sn_d01 = 266
 e_sn_d02 = 256
 i_parent_start_d02 = 372
 j_parent_start_d02 = 154
-
+merra = False
 #! Various physics and chemistry settings must be edited individually below for now. 
 
 for seq, syr, smon, sday, shr, eyr, emon, eday, ehr in zip(seqs, syrs, smons, sdays, shrs, eyrs, emons, edays, ehrs):
@@ -88,8 +88,12 @@ for seq, syr, smon, sday, shr, eyr, emon, eday, ehr in zip(seqs, syrs, smons, sd
         fl.write(f'parent_time_step_ratio              = 1,   15,    5,    5,\n')
         fl.write(f'feedback                            = 0,\n')
         fl.write(f'smooth_option                       = 0,\n')
-        fl.write(f'num_metgrid_levels                  = 34,\n')
-        fl.write(f'num_metgrid_soil_levels             = 4,\n')
+        if merra:
+            fl.write(f'num_metgrid_levels                  = 73,\n')
+            fl.write(f'num_metgrid_soil_levels             = 5,\n')
+        else:
+            fl.write(f'num_metgrid_levels                  = 34,\n')
+            fl.write(f'num_metgrid_soil_levels             = 4,\n')
         fl.write(f'interp_type                         = 2,\n')
         fl.write(f'lagrange_order                      = 2,\n')
         fl.write(f'zap_close_levels                    = 500,\n')
