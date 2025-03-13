@@ -31,7 +31,7 @@ if ungrib_prefix == 'MERRA':
    num_days = len(days)
 
 for seq, start_date, end_date in zip(seqs, start_dates, end_dates):
-     with open(f'namelist.{seq}') as fl:
+     with open(f'namelist.{seq}', 'a') as fl:
         fl.write(f"&share\n")
         fl.write(f"wrf_core = 'ARW',\n")
         fl.write(f"max_dom = 2,\n")
@@ -84,7 +84,7 @@ for seq, start_date, end_date in zip(seqs, start_dates, end_dates):
         fl.write(f"opt_metgrid_tbl_path         = '{wps_dir}/metgrid/',\n")
         fl.write(f"/\n")
 
-with open('wps_ghg.sh') as fl:
+with open('wps_ghg.sh','a') as fl:
    fl.write(f"#!/bin/bash -l\n")
    fl.write(f"#SBATCH -J WPS_GHG\n")
    fl.write(f"#SBATCH -e WPS_GHG.e.%j\n")
@@ -118,7 +118,7 @@ with open('wps_ghg.sh') as fl:
    fl.write(f"\n")
 
 if ungrib_prefix == 'MERRA':
-   with open('namelist.merra2wrf') as fl:
+   with open('namelist.merra2wrf','a') as fl:
       fl.write(f"&input\n")
       fl.write(f"    outputDirectory = './',\n")
       fl.write(f"    merraDirectory = './',\n")
@@ -126,17 +126,23 @@ if ungrib_prefix == 'MERRA':
       fl.write(f"    merraFile_const_2d_asm_Nx = 'MERRA2_101.const_2d_asm_Nx.00000000.nc4',\n")
       fl.write(f"    numberOfDays={num_days},\n")
       fl.write(f"    !withAerosol=1,\n")
-      fl.write(f"    merraDates({num_days})= {' '.join(str(i) for i in dates)}\n")
+      for i, date in enumerate(dates):
+         fl.write(f"    merraDates({i+1})= {date}\n")
       fl.write(f"    merraFormat_inst6_3d_ana_Nv = 2,\n")
-      fl.write(f"    merraFiles_inst6_3d_ana_Nv({num_days}) = {' '.join(str(i) for i in ananv_files)}\n")
+      for i, ananv in enumerate(ananv_files):
+         fl.write(f"    merraFiles_inst6_3d_ana_Nv({i+1}) = {ananv}\n")
       fl.write(f"    merraFormat_inst6_3d_ana_Np = 2,\n")
-      fl.write(f"    merraFiles_inst6_3d_ana_Np({num_days}) = {' '.join(str(i) for i in ananp_files)}\n")
+      for i, ananp in enumerate(ananp_files):
+         fl.write(f"    merraFiles_inst6_3d_ana_Np({i+1}) = {ananp}\n")
       fl.write(f"    merraFormat_tavg1_2d_slv_Nx = 2,\n")
-      fl.write(f"    merraFiles_tavg1_2d_slv_Nx({num_days}) = {' '.join(str(i) for i in slv_files)},\n")
+      for i, slv in enumerate(slv_files):
+         fl.write(f"    merraFiles_tavg1_2d_slv_Nx({i+1}) = {slv},\n")
       fl.write(f"    merraFormat_tavg1_2d_ocn_Nx = 2,\n")
-      fl.write(f"    merraFiles_tavg1_2d_ocn_Nx({num_days}) = {' '.join(str(i) for i in ocn_files)}\n")
+      for i, ocn in enumerate(ocn_files):
+         fl.write(f"    merraFiles_tavg1_2d_ocn_Nx({i+1}) = {ocn}\n")
       fl.write(f"    merraFormat_tavg1_2d_lnd_Nx = 2,\n")
-      fl.write(f"    merraFiles_tavg1_2d_lnd_Nx({num_days}) = {' '.join(str(i) for i in lnd_files)},\n")
+      for i, lnd in enumerate(lnd_files):
+         fl.write(f"    merraFiles_tavg1_2d_lnd_Nx({i+1}) = {lnd},\n")
       fl.write(f"    !merraFormat_inst3_3d_aer_Nv = 2,\n")
       fl.write(f"    !merraFiles_inst3_3d_aer_Nv(3) = 'MERRA2_400.inst3_3d_aer_Nv.20240712.nc4','MERRA2_400.inst3_3d_aer_Nv.20240713.nc4','MERRA2_400.inst3_3d_aer_Nv.20240714.nc4',\n")
       fl.write(f"/ \n")
