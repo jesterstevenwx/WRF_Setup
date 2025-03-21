@@ -10,7 +10,7 @@ run_time = '48:00:00' #must be in hh:mm:ss format
 tasks_per_node = 48
 nodes = 4
 wrf_dir = '$HOME/work/WRF/run/'
-met_em_dir = '../../wps/2023-expand'
+met_em_dir = '../WPS/'
 chem_dir = '$HOME/work/chem-files'
 moz_dir = '$HOME/mozbc'
 
