@@ -1,0 +1,6 @@
+[submodule "Merra2BC"]
+	path = Merra2BC
+	url = https://github.com/lumenus-sci/Merra2BC.git
+[submodule "merra2wps"]
+	path = merra2wps
+	url = https://github.com/lumenus-sci/merra2wps.git
