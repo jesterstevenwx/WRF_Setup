@@ -4,3 +4,6 @@
 [submodule "merra2wps"]
 	path = merra2wps
 	url = https://github.com/lumenus-sci/merra2wps.git
+[submodule "mozbc"]
+	path = mozbc
+	url = https://github.com/lumenus-sci/mozbc.git
