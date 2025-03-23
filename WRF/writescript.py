@@ -13,6 +13,9 @@ wrf_dir = '$HOME/work/WRF/run'
 met_em_dir = '../WPS'
 chem_dir = '$HOME/work/chem-files'
 moz_dir = '../mozbc'
+aerosols = False
+ndown = False
+d01_dir = '$SCRATCH/dj-ghg/WRF' 
 
 for seq, mon, day, hr in zip(seqs, mons, days, hrs):
     with open(f'wrf_ghg_{f"{seq:02}" if isinstance(seq, int) else seq}.sh','a') as fl:
@@ -41,18 +44,39 @@ for seq, mon, day, hr in zip(seqs, mons, days, hrs):
             fl.write(f'cp wrfinput_d01 wrfinput_d01_beforeCT\n')
             fl.write(f'cp wrfbdy_d01 wrfbdy_d01_beforeCT\n')
             fl.write(f'\n')
-            fl.write(f'ln -sf {moz_dir}/*2024*.inp .\n')
-            fl.write(f'ln -sf {moz_dir}/CO2CAMS*.inp .\n')
-            fl.write(f'ln -sf {moz_dir}/mozbc_* .\n')
-            fl.write(f'ln -sf {chem_dir}/CH4/CH4_CAMS/cams73_latest_ch4_conc_surface_satellite_inst_2023_00??.nc .\n')
-            fl.write(f'./mozbc_ch4 < CH4_2024yearly08.inp >& CH4_d01.log\n')
-            fl.write(f'./mozbc_ch4 < CH4_2024yearly08_d02.inp >& CH4_d02.log\n')
-            fl.write(f'\n')
-            fl.write(f'ln -sf {chem_dir}/CO2_CAMS/cams73*2023* .\n')
-            fl.write(f'\n')
-            fl.write(f'./mozbc_co2 < CO2CAMS_2024yearly08.inp >& CO2_d01.log\n')
-            fl.write(f'./mozbc_co2 < CO2CAMS_2024yearly08_d02.inp >& CO2_d02.log\n')
-            fl.write(f'\n')
+            if aerosols:
+                fl.write(f'cp ../Merra2BC/* .\n')
+                fl.write(f'ln -sf config-d02.py config.py\n')
+                fl.write(f'python zero_fields.py\n')
+                fl.write(f'python main.py\n')
+                fl.write(f'ln -sf config-d01.py config.py\n')
+                fl.write(f'python zero_fields.py\n')
+                fl.write(f'python main.py\n')
+                fl.write(f'\n')
+            else:
+                fl.write(f'ln -sf {moz_dir}/*2024*.inp .\n')
+                fl.write(f'ln -sf {moz_dir}/CO2CAMS*.inp .\n')
+                fl.write(f'ln -sf {moz_dir}/mozbc_* .\n')
+                fl.write(f'ln -sf {chem_dir}/CH4/CH4_CAMS/cams73_latest_ch4_conc_surface_satellite_inst_2023_00??.nc .\n')
+                fl.write(f'./mozbc_ch4 < CH4_2024yearly08.inp >& CH4_d01.log\n')
+                fl.write(f'./mozbc_ch4 < CH4_2024yearly08_d02.inp >& CH4_d02.log\n')
+                fl.write(f'\n')
+                fl.write(f'ln -sf {chem_dir}/CO2_CAMS/cams73*2023* .\n')
+                fl.write(f'\n')
+                fl.write(f'./mozbc_co2 < CO2CAMS_2024yearly08.inp >& CO2_d01.log\n')
+                fl.write(f'./mozbc_co2 < CO2CAMS_2024yearly08_d02.inp >& CO2_d02.log\n')
+                fl.write(f'\n')
+            if ndown:
+                fl.write(f'cp {d01_dir}/wrfout_d01* .\n')
+                fl.write(f'mv wrfinput_d02 wrfndi_d02\n')
+                fl.write(f'ln -sf namelist.input.ndown namelist.input\n')
+                fl.write(f'ibrun ./ndown.exe >& ndown.log\n')
+                fl.write(f'mv rsl.out.0000 rsl.out.ndown\n')
+                fl.write(f'mv rsl.error.0000 rsl.error.ndown\n')
+                fl.write(f'rm -f wrf*d01\n')
+                fl.write(f'mv wrfinput_d02 wrfinput_d01\n')
+                fl.write(f'mv wrfbdy_d02 wrfbdy_d01\n')
+                fl.write(f'\n')
         else:
             fl.write(f'ln -sf namelist.input.{f"{seq:02}" if isinstance(seq, int) else seq} namelist.input\n')
             if seq > 1:
