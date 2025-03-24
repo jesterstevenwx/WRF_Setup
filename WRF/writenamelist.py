@@ -45,7 +45,7 @@ for seq, syr, smon, sday, shr, eyr, emon, eday, ehr in zip(seqs, syrs, smons, sd
         fl.write(f'input_from_file                     = .true.,.true.,.true.,.true.,\n')
         fl.write(f'history_interval                    = 60, 60, 60, 60,\n')
         fl.write(f'frames_per_outfile                  = 1,  1,  1,  1,\n')
-        if seq in ['real', 1]:
+        if isinstance(seq, str) or seq == 1:
             fl.write(f'restart                             = .false.,\n')
         else:
             fl.write(f'restart                             = .true.,\n')
@@ -244,7 +244,6 @@ for seq, syr, smon, sday, shr, eyr, emon, eday, ehr in zip(seqs, syrs, smons, sd
         if ndown and isinstance(seq, int):
             fl.write(f'have_bsc_moist                      = .true.\n')
             fl.write(f'have_bsc_scalar                     = .true.\n')
-            fl.write(f'\n')
         fl.write(f'/\n')
         fl.write(f'\n')
         fl.write(f'&grib2\n')
