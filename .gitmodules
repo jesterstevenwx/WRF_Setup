@@ -1,9 +1,9 @@
 [submodule "Merra2BC"]
 	path = Merra2BC
-	url = https://github.com/lumenus-sci/Merra2BC.git
+	url = https://github.com/jesterstevenwx/Merra2BC.git
 [submodule "merra2wps"]
 	path = merra2wps
-	url = https://github.com/lumenus-sci/merra2wps.git
+	url = https://github.com/jesterstevenwx/merra2wps.git
 [submodule "mozbc"]
 	path = mozbc
-	url = https://github.com/lumenus-sci/mozbc.git
+	url = https://github.com/jesterstevenwx/mozbc.git
